@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct TestShopApp: App {
+    @StateObject var viewModel = HomeViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomeView().environmentObject(viewModel)
+//            FilterView().environmentObject(viewModel)
         }
     }
 }
