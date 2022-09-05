@@ -9,7 +9,6 @@ import Foundation
 
 // MARK: - Category
 struct Category: Identifiable {
-    
     private static var count: Int = 0
     
     let id: Int

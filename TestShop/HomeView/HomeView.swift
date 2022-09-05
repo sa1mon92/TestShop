@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var viewModel: HomeViewModel
     
-    @State var filterIsPresented = true
+    @State var filterIsPresented = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -19,11 +19,11 @@ struct HomeView: View {
                     VStack(spacing: 0) {
                         selectCategory
                         search
-                        hotSales
+                        HotSalesView()
                         BestSellersView(geomerty: geometry)
                         Rectangle()
                             .foregroundColor(Constants.backgroundColor)
-                            .frame(height: 80)
+                            .frame(height: 90)
                     }.background(Constants.backgroundColor)
                 }
                 .overlay(alignment: .bottom, content: {
@@ -36,14 +36,13 @@ struct HomeView: View {
                             .frame(height: 420)
                             .foregroundColor(.white)
                             .transition(AnyTransition.asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .bottom)))
+                            .shadow(color: Constants.shadowColor, radius: 20, x: 0, y: -5)
                             .overlay {
                                 FilterView(isPresented: $filterIsPresented)
                             }
                     }
                 })
-//                .adaptiveSheet(isPresented: $filterIsPresented, detents: [.medium()], smallestUndimmedDetentIdentifier: .large) {
-//                    Text("TestSheet")
-//                }
+                .ignoresSafeArea(.all, edges: .bottom)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .principal) {
@@ -151,79 +150,6 @@ struct HomeView: View {
             }
             .padding(.trailing, 37)
         }.padding(.top, 35)
-    }
-    
-    // MARK: - Hot Sales
-    var hotSales: some View {
-        VStack(spacing: 15) {
-            HStack {
-                Text("Hot Sales")
-                    .font(.system(size: 25, weight: .bold))
-                    .foregroundColor(Constants.darkColor)
-                    .padding(.leading, 17)
-                Spacer()
-                Button {
-                    // viewAll()
-                } label: {
-                    Text("see more").font(.system(size: 15))
-                        .foregroundColor(Constants.orangeColor)
-                }
-                .padding(.trailing, 40)
-            }
-            ZStack(alignment: .topLeading) {
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundColor(.black)
-                    .frame(height: 182)
-                    .overlay(alignment: .trailing) {
-                        if let url = viewModel.model?.homeStore[0].pictureURL {
-                            AsyncImage(url: url) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                            } placeholder: {
-                                ProgressView()
-                            }
-                            .frame(width: 170, height: 170)
-                            .background(Color.black)
-                            .clipShape(Rectangle())
-                            .padding(.trailing, 10)
-                        }
-                    }
-                HStack {
-                    VStack(alignment: .leading, spacing: 0) {
-                        ZStack {
-                            Circle()
-                                .frame(width: 27, height: 27)
-                                .foregroundColor(Constants.orangeColor)
-                            Text("New")
-                                .font(.system(size: 10))
-                                .foregroundColor(.white)
-                        }.opacity(viewModel.model?.homeStore[0].isNew == true ? 1 : 0)
-                        Text(viewModel.model?.homeStore[0].title ?? "")
-                            .font(.system(size: 25, weight: .semibold)) // fix me
-                            .foregroundColor(.white)
-                            .padding(.top, 18)
-                        Text(viewModel.model?.homeStore[0].subtitle ?? "")
-                            .font(.system(size: 11, weight: .semibold)) // fix me
-                            .foregroundColor(.white)
-                            .padding(.top, 5)
-                        Button {
-                            // fix me
-                        } label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .foregroundColor(.white)
-                                    .frame(width: 98, height: 23)
-                                Text("Buy now!")
-                                    .font(.system(size: 11, weight: .bold)) // fix me
-                                    .foregroundColor(.black)
-                            }
-                        }.padding(.top, 26)
-                    }
-                    .padding(EdgeInsets(top: 14, leading: 25, bottom: 0, trailing: 0))
-                }
-            }.padding([.leading, .trailing], 15)
-        }.padding(.top, 24)
     }
 }
 

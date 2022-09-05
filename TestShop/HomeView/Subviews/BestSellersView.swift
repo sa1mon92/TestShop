@@ -46,6 +46,10 @@ struct BestSellerView: View {
         geometry.size.width / 2 - 28
     }
     
+    let destinationLink: some View = ProductView()
+        .environmentObject(ProductViewModel())
+    @State private var linkActive = false
+    
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             RoundedRectangle(cornerRadius: 5)
@@ -86,7 +90,10 @@ struct BestSellerView: View {
                 Text(bestSeller.title)
                     .font(.system(size: 10))
             }.padding(EdgeInsets(top: 0, leading: 20, bottom: 15, trailing: 0))
-        }
+        }.background(NavigationLink("", destination: destinationLink, isActive: $linkActive).opacity(0))
+            .onTapGesture {
+                linkActive = true
+            }
     }
 }
 

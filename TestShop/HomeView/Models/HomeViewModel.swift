@@ -9,14 +9,15 @@ import SwiftUI
 import Combine
 
 class HomeViewModel: ObservableObject {
+
+    @Published private(set) var selectedCategoryIndex = 0
+    @Published private(set) var model: HomeModel?
+    
     let categories = [Category(name: "Phones"),
                               Category(name: "Computer"),
                               Category(name: "Health"),
                               Category(name: "Books")]
     private var cancellableSet: Set<AnyCancellable> = []
-    
-    @Published private(set) var selectedCategoryIndex = 0
-    @Published private(set) var model: HomeModel?
     
     init() {
         fetchModel()
