@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProductView: View {
-    @EnvironmentObject var viewModel: ProductViewModel
+    @EnvironmentObject var viewModel: ShopViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
@@ -17,7 +17,7 @@ struct ProductView: View {
                 header
                     .padding(.vertical)
                 Spacer()
-                if let imagesURLs = viewModel.model?.imagesURLs {
+                if let imagesURLs = viewModel.productDetailModel?.imagesURLs {
                     let itemHeight = geometry.size.height - 440 - 50
                     CarouselView(itemHeight: itemHeight, views: imagesURLs.compactMap({ url in
                         AnyView(AsyncImage(url: url) { image in
@@ -60,7 +60,7 @@ struct ProductView: View {
                 .foregroundColor(Constants.darkColor)
             Spacer()
             Button {
-                //
+                    //
             } label: {
                 Image("Cart")
                     .frame(width: 37, height: 37)
@@ -75,6 +75,6 @@ struct ProductView: View {
 struct ProductView_Previews: PreviewProvider {
     static var previews: some View {
         ProductView()
-            .environmentObject(ProductViewModel())
+            .environmentObject(ShopViewModel())
     }
 }

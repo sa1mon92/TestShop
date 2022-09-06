@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BestSellersView: View {
-    @EnvironmentObject var viewModel: HomeViewModel
+    @EnvironmentObject var viewModel: ShopViewModel
     let geomerty: GeometryProxy
     
     var body: some View {
@@ -28,7 +28,7 @@ struct BestSellersView: View {
                 .padding(.trailing, 40)
             }
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 14) {
-                if let bestSellers = viewModel.model?.bestSeller {
+                if let bestSellers = viewModel.homeModel?.bestSeller {
                     ForEach(bestSellers) { bestSeller in
                         BestSellerView(bestSeller: bestSeller, geometry: geomerty)
                     }
@@ -39,6 +39,8 @@ struct BestSellersView: View {
 }
 
 struct BestSellerView: View {
+    @EnvironmentObject var viewModel: ShopViewModel
+    
     let bestSeller: BestSeller
     let geometry: GeometryProxy
     
@@ -47,7 +49,6 @@ struct BestSellerView: View {
     }
     
     let destinationLink: some View = ProductView()
-        .environmentObject(ProductViewModel())
     @State private var linkActive = false
     
     var body: some View {
@@ -92,6 +93,7 @@ struct BestSellerView: View {
             }.padding(EdgeInsets(top: 0, leading: 20, bottom: 15, trailing: 0))
         }.background(NavigationLink("", destination: destinationLink, isActive: $linkActive).opacity(0))
             .onTapGesture {
+                viewModel.getProduct(id: String(bestSeller.id))
                 linkActive = true
             }
     }

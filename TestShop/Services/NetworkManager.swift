@@ -29,10 +29,7 @@ enum APIError: Error, LocalizedError {
 }
 
 class NetworkManager {
-    static let shared = NetworkManager()
     private var subscriptions = Set<AnyCancellable>()
-    
-    private init() { }
     
     func request<T: Codable>(type: T.Type, from url: URL) -> Future<T?, APIError> {
         return Future<T?, APIError> { [unowned self] promise in

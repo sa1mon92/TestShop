@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var viewModel: HomeViewModel
+    @EnvironmentObject var viewModel: ShopViewModel
     
     @State var filterIsPresented = false
     
@@ -20,6 +20,7 @@ struct HomeView: View {
                         selectCategory
                         search
                         HotSalesView()
+                            .frame(height: 250)
                         BestSellersView(geomerty: geometry)
                         Rectangle()
                             .foregroundColor(Constants.backgroundColor)
@@ -156,6 +157,6 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
-            .environmentObject(HomeViewModel())
+            .environmentObject(ShopViewModel())
     }
 }

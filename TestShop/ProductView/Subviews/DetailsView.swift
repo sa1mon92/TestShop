@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct DetailsView: View {
-    @EnvironmentObject var viewModel: ProductViewModel
+    @EnvironmentObject var viewModel: ShopViewModel
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     let sections = [Section(id: 0, name: "Shop"), Section(id: 1, name: "Details"), Section(id: 2, name: "Features")]
     let geometry: GeometryProxy
@@ -21,14 +22,14 @@ struct DetailsView: View {
         VStack(spacing: 30) {
             VStack(alignment: .leading, spacing: 5) {
                 HStack {
-                    Text(viewModel.model?.title ?? "")
+                    Text(viewModel.productDetailModel?.title ?? "")
                         .font(.system(size: 24, weight: .medium))
                         .foregroundColor(Constants.darkColor)
                     Spacer()
                     Button {
                         //
                     } label: {
-                        if let isFavorites = viewModel.model?.isFavorites {
+                        if let isFavorites = viewModel.productDetailModel?.isFavorites {
                             Image(isFavorites ? "FillFavourites" : "Favourites")
                                 .frame(width: 37, height: 37)
                                 .foregroundColor(.white)
@@ -38,7 +39,7 @@ struct DetailsView: View {
                     }
                 }
                 HStack {
-                    MyCosmosView(rating: viewModel.model?.rating ?? 0)
+                    MyCosmosView(rating: viewModel.productDetailModel?.rating ?? 0)
                 }
             }
             
@@ -66,28 +67,28 @@ struct DetailsView: View {
                 let itemWidth = (geometry.size.width - 70) / 4
                 VStack {
                     Image("Processor")
-                    Text(viewModel.model?.cpu ?? "")
+                    Text(viewModel.productDetailModel?.cpu ?? "")
                         .font(.system(size: 11))
                         .foregroundColor(Constants.grayColor)
                 }.frame(width: itemWidth)
                 Spacer()
                 VStack {
                     Image("Camera")
-                    Text(viewModel.model?.camera ?? "")
+                    Text(viewModel.productDetailModel?.camera ?? "")
                         .font(.system(size: 11))
                         .foregroundColor(Constants.grayColor)
                 }.frame(width: itemWidth)
                 Spacer()
                 VStack {
                     Image("Memory")
-                    Text(viewModel.model?.ssd ?? "")
+                    Text(viewModel.productDetailModel?.ssd ?? "")
                         .font(.system(size: 11))
                         .foregroundColor(Constants.grayColor)
                 }.frame(width: itemWidth)
                 Spacer()
                 VStack {
                     Image("Card")
-                    Text(viewModel.model?.sd ?? "")
+                    Text(viewModel.productDetailModel?.sd ?? "")
                         .font(.system(size: 11))
                         .foregroundColor(Constants.grayColor)
                 }.frame(width: itemWidth)
@@ -98,7 +99,7 @@ struct DetailsView: View {
                     .font(.system(size: 16, weight: .medium))
                 HStack {
                     HStack(spacing: 18) {
-                        if let colors = viewModel.model?.colors {
+                        if let colors = viewModel.productDetailModel?.colors {
                             ForEach(colors) { color in
                                 Circle()
                                     .frame(width: 39, height: 39)
@@ -116,7 +117,7 @@ struct DetailsView: View {
                     }
                     Spacer()
                     HStack {
-                        if let capacities = viewModel.model?.capacities {
+                        if let capacities = viewModel.productDetailModel?.capacities {
                             ForEach(capacities) { capacitiy in
                                 let isChoosen = capacitiy.id == selectedCapacityId
                                 ZStack {
@@ -139,7 +140,10 @@ struct DetailsView: View {
             }
             
             Button {
-                // Add to Cart()
+                if let product = viewModel.productDetailModel {
+                    viewModel.addToCart(product)
+                }
+                self.presentationMode.wrappedValue.dismiss()
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
@@ -147,7 +151,7 @@ struct DetailsView: View {
                     HStack {
                         Text("Add to Cart")
                         Spacer()
-                        if let price = viewModel.model?.price {
+                        if let price = viewModel.productDetailModel?.price {
                             Text("$\(price).00")
                         }
                         

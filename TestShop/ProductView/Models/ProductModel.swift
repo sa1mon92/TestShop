@@ -8,7 +8,7 @@
 import SwiftUI
 
 // MARK: - Product
-struct Product: Codable {
+struct Product: Codable, Hashable {
     let cpu, camera: String
     private let capacity: [String]
     let colorHex: [String]

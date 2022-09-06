@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct TabView: View {
+    @EnvironmentObject var viewModel: ShopViewModel
+    
+    @State var cartLinkActive = false
     
     var body: some View {
         ZStack {
@@ -25,7 +28,23 @@ struct TabView: View {
                 Button {
                     // open cart
                 } label: {
-                    Image("Cart")
+                    ZStack {
+                        let destinationLink = CartView().environmentObject(CartViewModel())
+                        Image("Cart")
+                            .background(NavigationLink("", destination: destinationLink, isActive: $cartLinkActive).opacity(0))
+                            .onTapGesture {
+                                cartLinkActive.toggle()
+                            }
+                        if viewModel.cartCount > 0 {
+                            Text(String(viewModel.cartCount))
+                                .frame(width: 20, height: 20)
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundColor(.white)
+                                .background(Constants.orangeColor)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .offset(x: 15, y: -10)
+                        }
+                    }
                 }
                 Spacer()
                 Button {

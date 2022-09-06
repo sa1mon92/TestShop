@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct TestShopApp: App {
-    @StateObject var viewModel = HomeViewModel()
+    @StateObject var viewModel = ShopViewModel()
     
     var body: some Scene {
         WindowGroup {
